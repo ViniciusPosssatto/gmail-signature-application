@@ -91,15 +91,6 @@ export default {
     },
   },
   mounted() {
-    // Inicialize o Firebase com suas credenciais
-    const firebaseConfig = {
-      apiKey: 'AIzaSyDmN1q8yCFOE9Zrs6B0BmWsaRc3s3XdLbI',
-      authDomain: 'YOUR_AUTH_DOMAIN',
-      projectId: 'signature-aplication',
-      appId: '903229522808',
-    }
-    initializeApp(firebaseConfig)
-
     // Verifique se o usuário já está autenticado
     const auth = getAuth()
     auth.onAuthStateChanged(user => {
