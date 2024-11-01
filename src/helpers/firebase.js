@@ -11,11 +11,11 @@ const VITE_FIREBASE_API_KEY = import.meta.env.VITE_FIREBASE_API_KEY
 const firebaseConfig = {
   apiKey: VITE_FIREBASE_API_KEY,
   authDomain: VITE_AUTH_DOMAIN,
-  projectId: '',
-  storageBucket: '',
-  messagingSenderId: '',
-  appId: '',
-  measurementId: '',
+  projectId: 'signature-aplication',
+  storageBucket: 'signature-aplication.firebasestorage.app',
+  messagingSenderId: '903229522808',
+  appId: '1:903229522808:web:1cbf3d7321ed6703ff3e8d',
+  measurementId: 'G-7J94G8Y4C6',
 }
 
 export function initialApp() {
@@ -41,3 +41,6 @@ export async function signOutUser() {
   const auth = getAuth()
   return await signOut(auth)
 }
+
+// import { getAnalytics } from 'firebase/analytics'
+// const analytics = getAnalytics(app)

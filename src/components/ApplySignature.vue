@@ -2,7 +2,7 @@
   <div>
     <div v-if="!user">
       <h1>Login with Firebase</h1>
-      <button @click="signInWithGoogle">Login</button>
+      <button @click="signInWithGoogle">Loginaaaaaaaa</button>
     </div>
     <div v-else>
       <h2>Olá, {{ user.displayName }}!</h2>
@@ -21,7 +21,6 @@
 </template>
 
 <script>
-import { initializeApp } from 'firebase/app'
 import { getAuth, signInWithPopup, GoogleAuthProvider } from 'firebase/auth'
 import axios from 'axios'
 

@@ -1,13 +1,12 @@
 <template>
   <div>
-    <div v-if="!token">
-      <h1>Login with Google</h1>
-      <button @click="loginWithGoogle">Login</button>
+    <div v-if="!user">
+      <h1>Login with Firebase</h1>
+      <button @click="signInWithGoogle">Login</button>
     </div>
     <div v-else>
-      <h2>Olá, {{ user.name }}!</h2>
+      <h2>Olá, {{ user.displayName }}!</h2>
       <p>E-mail: {{ user.email }}</p>
-      <p>Telefone: {{ user.phone }}</p>
 
       <h3>Configuração de Assinatura de E-mail</h3>
       <form @submit.prevent="applySignature">
@@ -18,56 +17,45 @@
         <button type="submit">Aplicar Assinatura</button>
       </form>
     </div>
+    <button @click="signOutUser">SignOut</button>
   </div>
 </template>
 
 <script>
 import axios from 'axios'
+import { getAuth, signInWithPopup, GoogleAuthProvider } from 'firebase/auth'
+import { signOutUser, getCurrentUser } from '@/helpers/firebase'
 
 export default {
-  name: 'LoginWithGoogle',
+  name: 'ApplySignature',
   data() {
     return {
-      token: null,
-      user: {},
+      user: null,
       signature: '',
     }
   },
+  computed: {},
   methods: {
-    loginWithGoogle() {
-      const clientId = 'YOUR_CLIENT_ID'
-      const redirectUri = 'YOUR_REDIRECT_URI'
-      const scopes =
-        'https://www.googleapis.com/auth/gmail.modify profile email phone'
+    signOutUser,
+    getCurrentUser,
+    async signInWithGoogle() {
+      const provider = new GoogleAuthProvider()
+      provider.addScope('profile')
+      provider.addScope('email')
+      const auth = getAuth()
 
-      const authUrl = `https://accounts.google.com/o/oauth2/auth?client_id=${clientId}&redirect_uri=${redirectUri}&response_type=token&scope=${scopes}&access_type=offline&prompt=consent`
-      window.location.href = authUrl
-    },
-    async getUserInfo(accessToken) {
-      try {
-        const response = await axios.get(
-          'https://www.googleapis.com/oauth2/v3/userinfo',
-          {
-            headers: {
-              Authorization: `Bearer ${accessToken}`,
-            },
-          },
-        )
-        return response.data
-      } catch (error) {
-        console.error('Erro ao obter informações do usuário:', error)
-        return null
-      }
+      await signInWithPopup(auth, provider)
+      this.user = this.getCurrentUser()
     },
     async applySignature() {
-      const accessToken = this.token
+      const user = this.user
+      const userId = user.uid
 
-      const userId = 'me'
       const signatureHTML = `
         <br>
         <hr>
         <div style="text-align: center;">
-          <b>${this.user.name}</b><br>
+          <b>${user.displayName}</b><br>
           <p>${this.signature}</p>
         </div>
       `
@@ -78,13 +66,17 @@ export default {
         },
       }
 
+      // Obtenha o token de ID do Firebase
+      const token = await this.user.getIdToken()
+      console.log('Token de ID:', token)
+
       try {
         const response = await axios.put(
           `https://gmail.googleapis.com/gmail/v1/users/${userId}/settings/signature`,
           requestBody,
           {
             headers: {
-              Authorization: `Bearer ${accessToken}`,
+              Authorization: `Bearer ${token}`,
               'Content-Type': 'application/json',
             },
           },
@@ -102,18 +94,11 @@ export default {
     },
   },
   mounted() {
-    // Obter o token de acesso e informações do usuário do URL após a autenticação
-    const token = window.location.hash.match(/access_token=([^&]*)/)[1]
-    if (token) {
-      this.token = token
-      this.getUserInfo(token)
-        .then(user => {
-          this.user = user
-        })
-        .catch(error => {
-          console.error('Erro ao obter informações do usuário:', error)
-        })
-    }
+    // Verifique se o usuário já está autenticado
+    const auth = getAuth()
+    auth.onAuthStateChanged(user => {
+      this.user = user
+    })
   },
 }
 </script>
