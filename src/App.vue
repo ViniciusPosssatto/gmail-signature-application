@@ -1,29 +1,25 @@
 <script setup>
-import { RouterLink, RouterView } from 'vue-router'
-import LoginWithGoogle from './components/LoginWithGoogle.vue'
+import { onMounted } from 'vue'
+import { getAuth } from 'firebase/auth'
+import { useRouter } from 'vue-router'
+
+const router = useRouter()
+
+onMounted(() => {
+  // Verifique se o usuário já está autenticado
+  const auth = getAuth()
+  auth.onAuthStateChanged(user => {
+    console.log(user)
+    if (!user || user == 'null') {
+      router.push('/login')
+    }
+    router.push('/application')
+  })
+})
 </script>
 
 <template>
   <div>
-    <header>
-      <img
-        alt="Vue logo"
-        class="logo"
-        src="@/assets/logo.svg"
-        width="125"
-        height="125"
-      />
-
-      <div class="wrapper">
-        <LoginWithGoogle />
-
-        <nav>
-          <RouterLink to="/">Home</RouterLink>
-          <RouterLink to="/about">About</RouterLink>
-        </nav>
-      </div>
-    </header>
-
     <RouterView />
   </div>
 </template>
