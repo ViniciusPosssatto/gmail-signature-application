@@ -19,38 +19,39 @@
 import axios from 'axios'
 import { ref } from 'vue'
 import { signOutUser } from '@/helpers/firebase'
+import { useGoogle } from '@/stores/google'
 
+const googleStore = useGoogle()
 const signature = ref('')
 
 async function applySignature() {
-  const user = this.user
-  const userId = user.uid
+  const { email, accessToken, displayName, phoneNumber, photoURL, uid } =
+    googleStore.googleUser
 
   const signatureHTML = `
       <br>
       <hr>
       <div style="text-align: center;">
-        <b>${user.displayName}</b><br>
-        <p>${this.signature}</p>
+        <img src="${photoURL}"></img><br>
+        <b>${displayName}</b><br>
+        <b>${email}</b><br>
+        <b>${phoneNumber}</b><br>
+        <p>${signature.value}</p>
       </div>
     `
 
   const requestBody = {
-    signature: {
-      htmlSignature: signatureHTML,
-    },
+    signature: signatureHTML,
+    user_id: uid,
+    access_token: accessToken,
   }
 
-  // Obtenha o token de ID do Firebase
-  const token = await user.getIdToken()
-
   try {
-    const response = await axios.put(
-      `https://gmail.googleapis.com/gmail/v1/users/${userId}/settings/signature`,
+    const response = await axios.post(
+      `http://localhost:5000/apply_signature`,
       requestBody,
       {
         headers: {
-          Authorization: `Bearer ${token}`,
           'Content-Type': 'application/json',
         },
       },

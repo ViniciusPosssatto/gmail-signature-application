@@ -2,17 +2,19 @@
 import { onMounted } from 'vue'
 import { getAuth } from 'firebase/auth'
 import { useRouter } from 'vue-router'
+import { useGoogle } from '@/stores/google'
 
+const googleStore = useGoogle()
 const router = useRouter()
 
 onMounted(() => {
   // Verifique se o usuário já está autenticado
   const auth = getAuth()
   auth.onAuthStateChanged(user => {
-    console.log(user)
-    if (!user || user == 'null') {
-      router.push('/login')
+    if (!user?.email || user === null) {
+      return
     }
+    googleStore.googleUser = user
     router.push('/application')
   })
 })
