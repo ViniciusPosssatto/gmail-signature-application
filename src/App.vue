@@ -1,27 +1,26 @@
 <script setup>
 import { onMounted } from 'vue'
-import { getAuth } from 'firebase/auth'
-import { useRouter } from 'vue-router'
-import { useGoogle } from '@/stores/google'
+import { RouterView, useRouter } from 'vue-router'
 
-const googleStore = useGoogle()
 const router = useRouter()
 
 onMounted(() => {
-  // Verifique se o usuário já está autenticado
-  const auth = getAuth()
-  auth.onAuthStateChanged(user => {
-    if (!user?.email || user === null) {
-      return
-    }
-    googleStore.googleUser = user
-    router.push('/application')
-  })
+  const gtoken = localStorage.getItem('gtoken')
+  if (gtoken) router.push('/application')
 })
 </script>
 
 <template>
-  <div>
+  <div id="app">
+    <header>
+      <img
+        alt="Vue logo"
+        class="logo"
+        src="@/assets/logo.svg"
+        width="125"
+        height="125"
+      />
+    </header>
     <RouterView />
   </div>
 </template>

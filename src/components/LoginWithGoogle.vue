@@ -1,23 +1,16 @@
 <template>
   <div>
     <h1>Login with Firebase</h1>
-    <button @click="signInWithGoogle">Login</button>
+    <button @click="login">Login with Google</button>
   </div>
 </template>
 
 <script setup>
-import { getAuth, signInWithPopup, GoogleAuthProvider } from 'firebase/auth'
-import { useGoogle } from '@/stores/google'
+import axios from 'axios'
 
-const googleStore = useGoogle()
-
-async function signInWithGoogle() {
-  const provider = new GoogleAuthProvider()
-  provider.addScope('profile')
-  provider.addScope('email')
-  const auth = getAuth()
-
-  const { user } = await signInWithPopup(auth, provider)
-  googleStore.googleUser = user
+function login() {
+  axios.post('http://localhost:5000/auth/google').then(({ data }) => {
+    window.open(data.url, '_self')
+  })
 }
 </script>
