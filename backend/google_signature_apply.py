@@ -11,6 +11,7 @@ API_KEY = os.environ.get('API_KEY')
 # Construir o serviço Gmail
 service = build('gmail', 'v1', developerKey=API_KEY)
 
+
 @app.route('/apply_signature', methods=['POST'])
 def apply_signature():
     """
@@ -30,12 +31,11 @@ def apply_signature():
         }
     }
 
-    # Fazer a requisição para a API do Google Gmail
-    try:
-        result = service.users().settings().update(userId=USER_ID, body=body).execute()
-        return jsonify({"message": "Assinatura aplicada com sucesso.", "result": result}), 200
-    except Exception as e:
-        return jsonify({"error": str(e)}), 500
+    result = service.users().settings().update(userId=USER_ID,
+                                               body=body).execute()
+    print(result)
+    return jsonify(result)
+
 
 if __name__ == '__main__':
-    app.run(debug=True) 
+    app.run(debug=True)
