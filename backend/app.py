@@ -25,8 +25,12 @@ class Production(object):
     REDIRECT_URI = "http://localhost:5000/login/callback"
 
 
+ENV = os.getenv('ENV')
+
+env_config = {'DEV': Development, 'PROD': Production}
+
 app = Flask(__name__)
-app.config.from_object(Development)
+app.config.from_object(env_config[ENV])
 CORS(app)
 
 CLIENT_SECRETS_OBJECT = os.getenv('GOOGLE_CLIENT_SECRETS')

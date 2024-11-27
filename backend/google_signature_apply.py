@@ -16,6 +16,7 @@ service = build('gmail', 'v1', developerKey=API_KEY)
 def apply_signature():
     """
     Aplica uma assinatura à conta Gmail do usuário.
+    @gmail.com e @domínio.empresarial
     """
 
     # Obter a assinatura do corpo da requisição
