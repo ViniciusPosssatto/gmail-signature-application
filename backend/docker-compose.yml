@@ -1,0 +1,12 @@
+version: '3.11'
+
+services:
+  web:
+    container_name: signature-aplication
+    build:
+      context: .
+    environment:
+      - PORT=5000
+      - OAUTHLIB_INSECURE_TRANSPORT=1
+    ports:
+      - '5000:5000'
