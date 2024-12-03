@@ -16,16 +16,18 @@ class Development(object):
     SECRET_KEY = os.getenv('SECRET_KEY')
     FRONTEND_URL = "http://localhost:5173"
     REDIRECT_URI = "http://localhost:5000/login/callback"
+    CLIENT_SECRETS_OBJECT = os.getenv('GOOGLE_CLIENT_SECRETS')
 
 
 class Production(object):
     TESTING = False
-    SECRET_KEY = os.getenv('SECRET_KEY')
+    SECRET_KEY = os.environ.get('SECRET_KEY')
     FRONTEND_URL = "http://localhost:5173"
     REDIRECT_URI = "http://localhost:5000/login/callback"
+    CLIENT_SECRETS_OBJECT = os.environ.get('GOOGLE_CLIENT_SECRETS')
 
 
-ENV = os.getenv('ENV')
+ENV = os.environ.get('ENV')
 
 env_config = {'DEV': Development, 'PROD': Production}
 
@@ -33,10 +35,8 @@ app = Flask(__name__)
 app.config.from_object(env_config[ENV])
 CORS(app)
 
-CLIENT_SECRETS_OBJECT = os.getenv('GOOGLE_CLIENT_SECRETS')
-
 flow = Flow.from_client_config(
-    client_config=json.loads(CLIENT_SECRETS_OBJECT),
+    client_config=json.loads(app.config.get('CLIENT_SECRETS_OBJECT')),
     scopes=[
 		"https://www.googleapis.com/auth/userinfo.email",
 		"https://www.googleapis.com/auth/userinfo.profile",
@@ -64,7 +64,7 @@ def callback():
     credentials = flow.fetch_token(code=code)
     token = credentials.get('access_token')
 
-    return redirect(f"{os.getenv('FRONTEND_URL')}/application?token={token}")
+    return redirect(f"{app.config.get('FRONTEND_URL')}/application?token={token}")
 
 
 @app.route("/apply-signature", methods=["PUT"])
