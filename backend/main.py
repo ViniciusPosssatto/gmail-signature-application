@@ -22,8 +22,8 @@ class Development(object):
 class Production(object):
     TESTING = False
     SECRET_KEY = os.environ.get('SECRET_KEY')
-    FRONTEND_URL = "http://localhost:5173"
-    REDIRECT_URI = "http://localhost:5000/login/callback"
+    FRONTEND_URL = "https://signature-aplication.web.app"
+    REDIRECT_URI = "https://gmail-signature-903229522808.us-central1.run.app/login/callback"
     CLIENT_SECRETS_OBJECT = os.environ.get('GOOGLE_CLIENT_SECRETS')
 
 
@@ -44,7 +44,7 @@ flow = Flow.from_client_config(
         'https://www.googleapis.com/auth/user.phonenumbers.read',
 		"openid",
     ],
-    redirect_uri="http://localhost:5000/login/callback",
+    redirect_uri=f"{app.config.REDIRECT_URI}/login/callback",
 )
 
 

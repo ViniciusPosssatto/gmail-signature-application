@@ -9,7 +9,9 @@
 import axios from 'axios'
 
 function login() {
-  axios.post('http://localhost:5000/auth/google').then(({ data }) => {
+  const localUrl = 'http://localhost:5000'
+  const gcpUrl = 'https://gmail-signature-903229522808.us-central1.run.app'
+  axios.post(`${gcpUrl}/auth/google`).then(({ data }) => {
     window.open(data.url, '_self')
   })
 }

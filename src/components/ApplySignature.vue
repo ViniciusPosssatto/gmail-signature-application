@@ -126,9 +126,11 @@ async function applySignature() {
     access_token: gtoken,
     email: primaryEmail.value,
   }
+  const localUrl = 'http://localhost:5000/auth/google'
+  const gcpUrl = 'https://gmail-signature-903229522808.us-central1.run.app'
 
   await axios
-    .put(`http://localhost:5000/apply-signature`, requestBody, {
+    .put(`${gcpUrl}/apply-signature`, requestBody, {
       headers: {
         'Content-Type': 'application/json',
       },
