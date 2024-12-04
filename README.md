@@ -46,6 +46,4 @@ firebase init hosting
 firebase deploy --only hosting
 ```
 
-```sh
 ** I configure the authomatic deploy with github actions when an PR is merged in main branch **
-```
