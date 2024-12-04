@@ -9,10 +9,12 @@
 import axios from 'axios'
 
 function login() {
-  const localUrl = 'http://localhost:5000'
-  const gcpUrl = 'https://gmail-signature-903229522808.us-central1.run.app'
-  axios.post(`${gcpUrl}/auth/google`).then(({ data }) => {
-    window.open(data.url, '_self')
+  const url = import.meta.env.VITE_API_URL || 'http://localhost:5000'
+
+  axios.post(`${url}/auth/google`).then(({ data }) => {
+    window.open(data.url, '_self').catch(error => {
+      console.log(error)
+    })
   })
 }
 </script>

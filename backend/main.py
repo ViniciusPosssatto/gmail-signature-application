@@ -44,7 +44,7 @@ flow = Flow.from_client_config(
         'https://www.googleapis.com/auth/user.phonenumbers.read',
 		"openid",
     ],
-    redirect_uri=f"{app.config.REDIRECT_URI}/login/callback",
+    redirect_uri=f"{app.config.get('REDIRECT_URI')}/login/callback",
 )
 
 

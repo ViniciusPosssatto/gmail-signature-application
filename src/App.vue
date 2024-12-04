@@ -1,15 +1,3 @@
-<script setup>
-import { onMounted } from 'vue'
-import { RouterView, useRouter } from 'vue-router'
-
-const router = useRouter()
-
-onMounted(() => {
-  const gtoken = localStorage.getItem('gtoken')
-  if (gtoken) router.push('/application')
-})
-</script>
-
 <template>
   <div id="app">
     <header>
@@ -24,6 +12,18 @@ onMounted(() => {
     <RouterView />
   </div>
 </template>
+
+<script setup>
+import { onMounted } from 'vue'
+import { RouterView, useRouter } from 'vue-router'
+
+const router = useRouter()
+
+onMounted(() => {
+  const gtoken = localStorage.getItem('gtoken')
+  if (gtoken) router.push('/application')
+})
+</script>
 
 <style scoped>
 header {
