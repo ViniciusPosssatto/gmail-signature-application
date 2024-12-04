@@ -33,3 +33,19 @@ npm run build
 ```sh
 npm run lint
 ```
+
+## Deploy to firebase
+
+<configure your project>
+
+```sh
+firebase init hosting
+```
+
+```sh
+firebase deploy --only hosting
+```
+
+```sh
+** I configure the authomatic deploy with github actions when an PR is merged in main branch **
+```
