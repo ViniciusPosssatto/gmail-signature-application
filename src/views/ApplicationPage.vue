@@ -10,9 +10,8 @@ import ApplySignature from '@/components/ApplySignature.vue'
 <style>
 @media (min-width: 1024px) {
   .about {
-    min-height: 100vh;
+    min-height: 90vh;
     display: flex;
-    align-items: center;
   }
 }
 </style>
