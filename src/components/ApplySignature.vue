@@ -25,12 +25,12 @@
     </div>
     <form style="display: flex; gap: 10px">
       <input type="radio" value="models" v-model="option" />
-      <label for="models">Utilizar modelos</label>
+      <label for="models"><h3>Utilizar modelos</h3></label>
       <input type="radio" value="html" v-model="option" />
-      <label for="html">Utilizar html</label>
+      <label for="html"><h3>Utilizar html</h3></label>
     </form>
     <div v-if="option == 'models'">
-      <h3 style="margin-top: 10px">Modelos de Assinatura de E-mail</h3>
+      <h4 style="margin-top: 10px">Modelos de Assinatura de E-mail</h4>
       <div class="models-buttons">
         <button @click="setSignatureChoiced('signatureOne')">Modelo 1</button>
         <button @click="setSignatureChoiced('signatureTwo')">Modelo 2</button>
@@ -140,7 +140,7 @@
           </form>
         </div>
         <div class="preview-container">
-          <h3>Pré-visualização da Assinatura</h3>
+          <h3 style="margin-bottom: 10px">Pré-visualização da Assinatura</h3>
           <div class="signature">
             <span v-html="generateSignature"></span>
           </div>
@@ -157,7 +157,9 @@
           cols="30"
           rows="10"
         ></textarea>
-        <button @click="applySignature()">Aplicar Assinatura</button>
+        <button style="margin: 15px 0 15px 0" @click="applySignature()">
+          Aplicar Assinatura
+        </button>
       </div>
       <div class="preview-container">
         <h3>Pré-visualização da Assinatura</h3>
@@ -179,9 +181,7 @@ import { signatureModels } from '@/signatureModels/signatures'
 const route = useRoute()
 const router = useRouter()
 const signature = ref('')
-const name = ref('')
 const primaryEmail = ref('')
-const photo = ref('')
 const phoneNumbers = ref({})
 
 const option = ref('models')
@@ -235,6 +235,8 @@ function setSignatureChoiced(key) {
 }
 
 const generateSignature = computed(() => {
+  if (option.value === 'html') return signatureInHtml.value
+
   let signatureHtml = signature.value
 
   placeholders.forEach(placeholder => {
@@ -303,7 +305,8 @@ function setUser(data) {
 async function applySignature() {
   const gtoken = localStorage.getItem('gtoken')
   const requestBody = {
-    signature: generateSignature.value,
+    signature:
+      option.value == 'html' ? signatureInHtml.value : generateSignature.value,
     access_token: gtoken,
     email: formData.email,
   }
