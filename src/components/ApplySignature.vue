@@ -136,7 +136,9 @@
                 <input type="text" id="youtube" v-model="formData.youtube" />
               </div>
             </div>
-            <button type="submit">Aplicar Assinatura</button>
+            <button type="submit" :disabled="inRequest">
+              Aplicar Assinatura
+            </button>
           </form>
         </div>
         <div class="preview-container">
@@ -157,7 +159,11 @@
           cols="30"
           rows="10"
         ></textarea>
-        <button style="margin: 15px 0 15px 0" @click="applySignature()">
+        <button
+          style="width: 170px; margin: 10px 0 0 0"
+          @click="applySignature()"
+          :disabled="inRequest"
+        >
           Aplicar Assinatura
         </button>
       </div>
@@ -187,6 +193,7 @@ const phoneNumbers = ref({})
 const option = ref('models')
 const userInfoTab = ref('primary')
 const signatureInHtml = ref('')
+const inRequest = ref(false)
 
 const formData = reactive({
   photo: '',
@@ -303,6 +310,7 @@ function setUser(data) {
 //           `)
 
 async function applySignature() {
+  inRequest.value = true
   const gtoken = localStorage.getItem('gtoken')
   const requestBody = {
     signature:
@@ -326,6 +334,9 @@ async function applySignature() {
       if (error.code === 401) {
         localStorage.removeItem('gtoken')
       }
+    })
+    .finally(() => {
+      inRequest.value = false
     })
 }
 
@@ -392,11 +403,5 @@ onMounted(async () => {
   display: flex;
   gap: 10px;
   margin-top: 15px;
-}
-
-button {
-  width: 130px;
-  height: 25px;
-  cursor: pointer;
 }
 </style>
