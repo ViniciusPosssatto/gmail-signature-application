@@ -61,7 +61,7 @@ export const signatureModels = {
         background: rgba(37, 212, 102, 0.1);
         margin-top: 5px;
       "
-      href="https://wa.me/PHONE"
+      href="https://wa.me/USER_PHONE"
     >
       <img
         class=""
@@ -200,7 +200,7 @@ export const signatureModels = {
         <p>
           <span style="color: #808080"
             ><span style="font-size: 13.3333px"
-              >Telefone: PHONE | ENTERPRISE_PHONE</span
+              >Telefone: USER_PHONE | ENTERPRISE_PHONE</span
             ></span
           >
         </p>

@@ -19,7 +19,7 @@
           width="55"
           style="border-radius: 50%"
         />
-        <h2>Olá, {{ formData.user_name }}!</h2>
+        <h2>Olá, {{ userName }}!</h2>
       </div>
       <button @click="logout()">Logout</button>
     </div>
@@ -71,7 +71,7 @@
               </div>
               <div class="form-group">
                 <label for="phone">Telefone:</label>
-                <input type="tel" id="phone" v-model="formData.phone" />
+                <input type="tel" id="phone" v-model="formData.user_phone" />
               </div>
               <div class="form-group">
                 <label for="department">Departamento:</label>
@@ -211,8 +211,10 @@ const formData = reactive({
   linkedin: '',
   youtube: '',
   site: '',
+  user_phone: '',
 })
 
+const userName = ref('')
 const placeholders = [
   'PHOTO',
   'USER_NAME',
@@ -228,8 +230,7 @@ const placeholders = [
   'TWITTER',
   'YOUTUBE',
   'LINKEDIN',
-  'PHONE',
-  'ENTERPRISE_PHONE',
+  'USER_PHONE',
 ]
 
 const errors = reactive({
@@ -283,6 +284,7 @@ function setUser(data) {
     el => el?.metadata?.primary,
   )?.value
   formData['user_name'] = data?.names?.[0]?.displayName
+  userName.value = data?.names?.[0]?.displayName
   formData['photo'] = data?.photos?.find(el => el?.default)?.url
 
   const numbers = data?.phoneNumbers || []
@@ -311,11 +313,11 @@ function setUser(data) {
 
 async function applySignature() {
   inRequest.value = true
-  const gtoken = localStorage.getItem('gtoken')
+  const authToken = localStorage.getItem('authToken')
   const requestBody = {
     signature:
       option.value == 'html' ? signatureInHtml.value : generateSignature.value,
-    access_token: gtoken,
+    access_token: authToken,
     email: formData.email,
   }
   const url = import.meta.env.VITE_API_URL || 'http://localhost:5000'
@@ -332,7 +334,7 @@ async function applySignature() {
     .catch(error => {
       console.log('err: ', error)
       if (error.code === 401) {
-        localStorage.removeItem('gtoken')
+        localStorage.removeItem('authToken')
       }
     })
     .finally(() => {
@@ -341,18 +343,19 @@ async function applySignature() {
 }
 
 function logout() {
-  localStorage.removeItem('gtoken')
+  localStorage.removeItem('authToken')
   router.push('/login')
 }
 
 onMounted(async () => {
-  const gtoken = route.query.token || localStorage.getItem('gtoken')
-  if (!gtoken) {
+  const authToken = route.query.token || localStorage.getItem('authToken')
+  if (!authToken) {
     router.push('/login')
     return
   }
-  localStorage.setItem('gtoken', gtoken)
-  if (!primaryEmail.value) await getUserInfos(gtoken)
+
+  localStorage.setItem('authToken', authToken)
+  if (!primaryEmail.value) await getUserInfos(authToken)
 })
 </script>
 <style scoped>
