@@ -1,7 +1,5 @@
 <template>
-  <main class="about">
-    <ApplySignature />
-  </main>
+  <ApplySignature />
 </template>
 <script setup>
 import ApplySignature from '@/components/ApplySignature.vue'

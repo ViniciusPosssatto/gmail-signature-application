@@ -1,5 +1,5 @@
 <template>
-  <div id="app" style="display: flex; flex-direction: column">
+  <div id="app" style="display: flex">
     <RouterView />
   </div>
 </template>
